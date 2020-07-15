@@ -1,13 +1,14 @@
 from selenium import webdriver
 from time import sleep
 
+#Use your own username and password for this
 username = "your_username"
 password = "your_password"
 
 
 class PDF_download():
     def __init__(self, book_name):
-        self.driver = webdriver.Chrome('chromedriver_win32/chromedriver')
+        self.driver = webdriver.Chrome('path/to/chromedriver_win32/chromedriver')
         self.book_name = book_name
     def download(self):
         try:
@@ -18,10 +19,12 @@ class PDF_download():
                 found = 0
                 print(i)
                 book = self.driver.find_element_by_xpath(f'/html/body/div[3]/div[1]/div[1]/div[4]/ul/li[{i}]/div/div/div[2]/a/h2')
+                #download if the PDF name starts with the title searched for
                 if book.text.capitalize().startswith(self.book_name.capitalize()):
                     book.click()
                     break
                     found = 1
+                #If none of the available PDFs starts with the name searched
                 if i == 10 and not found:
                     book = self.driver.find_element_by_xpath('/html/body/div[3]/div[1]/div[1]/div[4]/ul/li[1]/div/div/div[2]/a/h2')
                     book.click()
@@ -49,7 +52,7 @@ class PDF_download():
                 self.download()
             except:
                 self.download()
-        
+    #To Dismiss Popups
     def dismiss_popup(self):
         cancel = self.driver.find_element_by_xpath('//*[@id="pdfdriveAlerts"]/div/div/div/i')
         cancel.click()
@@ -78,17 +81,19 @@ class BumbleBot():
         login.click()
         sleep(10)
         self.driver.switch_to_window(self.driver.window_handles[0])
+        
         for i in range(5):
             self.like()
             sleep(2)
-            #self.pass_()
-            #sleep(2)
-        
+            self.pass_()
+            sleep(2)
+    #to swipe right to the profile you see    
     def like(self):
         like_btn = bot.driver.find_element_by_xpath('//*[@id="main"]/div/div[1]/main/div[2]/div/div/span/div[2]/div/div[2]/div/div[3]/div/div[1]/span')
         like_btn.click()
-        
+    #to swipe left to the profile you see    
     def pass_(self):
+        #xpath may need to be changed
         pass_btn = self.driver.find_element_by_xpath('//*[@id="main"]/div/div[1]/main/div[2]/div/div/span/div[2]/div/div[2]/div/div[1]/div/div[1]/span')
         pass_btn.click()
 
